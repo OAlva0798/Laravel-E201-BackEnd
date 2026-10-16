@@ -3,6 +3,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\CompanyController;
 use App\Http\Controllers\Api\CenterController;
 use App\Http\Controllers\Api\DepartmentController;
 use App\Http\Controllers\Api\EmailVerificationController;
@@ -109,6 +110,7 @@ Route::delete('/system-settings/{id}', [SystemSettingController::class, 'destroy
 |--------------------------------------------------------------------------
 */
 
+Route::apiResource('company', CompanyController::class);
 Route::apiResource('centers', CenterController::class);
 Route::apiResource('departments', DepartmentController::class);
 Route::apiResource('positions', PositionController::class);

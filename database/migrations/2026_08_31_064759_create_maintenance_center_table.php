@@ -16,8 +16,8 @@ return new class extends Migration
 
             $table->text('mc_reference');
             $table->string('mc_name', 255);
-            $table->string('mc_head_uaccid', 255);
-            $table->string('mc_head_position', 255);
+            $table->string('mc_head_uaccid', 255)->nullable();
+            $table->string('mc_head_position', 255)->nullable();
 
             $table->enum('mc_status', [
                 'Active',
