@@ -185,5 +185,20 @@ class MaintenanceSeeder extends Seeder
             ['mp_reference' => 'MP2026-00064', 'mp_department_reference' => 'MD2026-00021', 'mp_name' => 'Technical Officer', 'mp_status' => 'Active'],
 
         ]);
+
+        // 5. Seed Maintenance Position Level
+        DB::table('maintenance_position_level')->insert([
+            ['mpl_reference' => 'MPL2026-00001', 'mpl_name' => 'President', 'mpl_status' => 'Active'],
+            ['mpl_reference' => 'MPL2026-00002', 'mpl_name' => 'Vice President', 'mpl_status' => 'Active'],
+            ['mpl_reference' => 'MPL2026-00003', 'mpl_name' => 'Senior Manager', 'mpl_status' => 'Active'],
+            ['mpl_reference' => 'MPL2026-00004', 'mpl_name' => 'Department Manager', 'mpl_status' => 'Active'],
+            ['mpl_reference' => 'MPL2026-00005', 'mpl_name' => 'Supervisory', 'mpl_status' => 'Active'],
+            ['mpl_reference' => 'MPL2026-00006', 'mpl_name' => 'Senior Officer', 'mpl_status' => 'Active'],
+            ['mpl_reference' => 'MPL2026-00007', 'mpl_name' => 'Officer', 'mpl_status' => 'Active'],
+            ['mpl_reference' => 'MPL2026-00008', 'mpl_name' => 'Senior Staff', 'mpl_status' => 'Active'],
+            ['mpl_reference' => 'MPL2026-00009', 'mpl_name' => 'Staff', 'mpl_status' => 'Active'],
+            ['mpl_reference' => 'MPL2026-00010', 'mpl_name' => 'Rank and File', 'mpl_status' => 'Active'],
+        ]);
+
     }
 }

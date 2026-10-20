@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\DepartmentController;
 use App\Http\Controllers\Api\EmailVerificationController;
 use App\Http\Controllers\Api\PasswordResetController;
 use App\Http\Controllers\Api\PositionController;
+use App\Http\Controllers\Api\PositionLevelController;
 use App\Http\Controllers\Api\SystemSettingController;
 use App\Http\Controllers\Api\UserDetailsController;
 use App\Http\Controllers\Api\EmailDispatchController;
@@ -114,6 +115,7 @@ Route::apiResource('company', CompanyController::class);
 Route::apiResource('centers', CenterController::class);
 Route::apiResource('departments', DepartmentController::class);
 Route::apiResource('positions', PositionController::class);
+Route::apiResource('positionLevel', PositionLevelController::class);
 Route::apiResource('user-details', UserDetailsController::class);
 
 /*

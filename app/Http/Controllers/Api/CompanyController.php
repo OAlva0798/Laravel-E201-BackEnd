@@ -76,9 +76,9 @@ class CompanyController extends Controller
                 $query->where('mco_status', $validated['status']);
             }
 
-            if (!$request->boolean('include_deleted')) {
-                $query->where('mco_status', '!=', 'Deleted');
-            }
+            // if (!$request->boolean('include_deleted')) {
+            //     $query->where('mco_status', '!=', 'Deleted');
+            // }
 
             $companies = $query
                 ->orderBy('mco_name', 'asc')
