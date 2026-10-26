@@ -63,16 +63,15 @@ class MaintenanceSeeder extends Seeder
         
             // Finance Center (MC2026-00006)
             ['md_reference' => 'MD2026-00017', 'md_center_reference' => 'MC2026-00006', 'md_name' => 'Finance', 'md_status' => 'Active'],
-            ['md_reference' => 'MD2026-00018', 'md_center_reference' => 'MC2026-00006', 'md_name' => 'Finance (SLAF)', 'md_status' => 'Active'],
             
             // Registrar (MC2026-00007)
-            ['md_reference' => 'MD2026-00019', 'md_center_reference' => 'MC2026-00007', 'md_name' => 'Office of the Registrar', 'md_status' => 'Active'],
+            ['md_reference' => 'MD2026-00018', 'md_center_reference' => 'MC2026-00007', 'md_name' => 'Office of the Registrar', 'md_status' => 'Active'],
         
             // Quality Standards Office (MC2026-00008)
-            ['md_reference' => 'MD2026-00020', 'md_center_reference' => 'MC2026-00008', 'md_name' => 'Quality Standards Office', 'md_status' => 'Active'],
+            ['md_reference' => 'MD2026-00019', 'md_center_reference' => 'MC2026-00008', 'md_name' => 'Quality Standards Office', 'md_status' => 'Active'],
             
             // Transformative Leaders Unit (MC2026-00009)
-            ['md_reference' => 'MD2026-00021', 'md_center_reference' => 'MC2026-00009', 'md_name' => 'Transformative Leaders Unit', 'md_status' => 'Active'],
+            ['md_reference' => 'MD2026-00020', 'md_center_reference' => 'MC2026-00009', 'md_name' => 'Transformative Leaders Unit', 'md_status' => 'Active'],
         ]);
 
         // 4. Seed Maintenance Position, grouped by Maintenance Department
@@ -167,22 +166,28 @@ class MaintenanceSeeder extends Seeder
             ['mp_reference' => 'MP2026-00054', 'mp_department_reference' => 'MD2026-00017', 'mp_name' => 'Accountant', 'mp_status' => 'Active'],
             ['mp_reference' => 'MP2026-00055', 'mp_department_reference' => 'MD2026-00017', 'mp_name' => 'Cashier', 'mp_status' => 'Active'],
 
-            // Finance (SLAF) (MD2026-00018)
-            ['mp_reference' => 'MP2026-00056', 'mp_department_reference' => 'MD2026-00018', 'mp_name' => 'Admin Supervisor, SLAF', 'mp_status' => 'Active'],
-            ['mp_reference' => 'MP2026-00057', 'mp_department_reference' => 'MD2026-00018', 'mp_name' => 'Staff, SLAF', 'mp_status' => 'Active'],
+            // Finance (SLAF) (MD2026-00017)
+            ['mp_reference' => 'MP2026-00056', 'mp_department_reference' => 'MD2026-00017', 'mp_name' => 'Admin Supervisor, SLAF', 'mp_status' => 'Active'],
+            ['mp_reference' => 'MP2026-00057', 'mp_department_reference' => 'MD2026-00017', 'mp_name' => 'Staff, SLAF', 'mp_status' => 'Active'],
 
-            // Office of the Registrar (MD2026-00019)
-            ['mp_reference' => 'MP2026-00058', 'mp_department_reference' => 'MD2026-00019', 'mp_name' => 'Registrar', 'mp_status' => 'Active'],
-            ['mp_reference' => 'MP2026-00059', 'mp_department_reference' => 'MD2026-00019', 'mp_name' => 'Admission Officer', 'mp_status' => 'Active'],
-            ['mp_reference' => 'MP2026-00060', 'mp_department_reference' => 'MD2026-00019', 'mp_name' => 'Staff', 'mp_status' => 'Active'],
+            // Office of the Registrar (MD2026-00018)
+            ['mp_reference' => 'MP2026-00058', 'mp_department_reference' => 'MD2026-00018', 'mp_name' => 'Registrar', 'mp_status' => 'Active'],
+            ['mp_reference' => 'MP2026-00059', 'mp_department_reference' => 'MD2026-00018', 'mp_name' => 'Admission Officer', 'mp_status' => 'Active'],
+            ['mp_reference' => 'MP2026-00060', 'mp_department_reference' => 'MD2026-00018', 'mp_name' => 'Staff', 'mp_status' => 'Active'],
 
-            // Quality Standards Office (MD2026-00020)
-            ['mp_reference' => 'MP2026-00061', 'mp_department_reference' => 'MD2026-00020', 'mp_name' => 'Assistant Manager, QSO', 'mp_status' => 'Active'],
-            ['mp_reference' => 'MP2026-00062', 'mp_department_reference' => 'MD2026-00020', 'mp_name' => 'Staff, QSO', 'mp_status' => 'Active'],
-            ['mp_reference' => 'MP2026-00063', 'mp_department_reference' => 'MD2026-00020', 'mp_name' => 'Quality Manager', 'mp_status' => 'Active'],
+            // Quality Standards Office (MD2026-00019)
+            ['mp_reference' => 'MP2026-00061', 'mp_department_reference' => 'MD2026-00019', 'mp_name' => 'Assistant Manager, QSO', 'mp_status' => 'Active'],
+            ['mp_reference' => 'MP2026-00062', 'mp_department_reference' => 'MD2026-00019', 'mp_name' => 'Staff, QSO', 'mp_status' => 'Active'],
+            ['mp_reference' => 'MP2026-00063', 'mp_department_reference' => 'MD2026-00019', 'mp_name' => 'Quality Manager', 'mp_status' => 'Active'],
 
-            // Transformative Leaders Unit (MD2026-00021)
-            ['mp_reference' => 'MP2026-00064', 'mp_department_reference' => 'MD2026-00021', 'mp_name' => 'Technical Officer', 'mp_status' => 'Active'],
+            // Transformative Leaders Unit (MD2026-00020)
+            ['mp_reference' => 'MP2026-00064', 'mp_department_reference' => 'MD2026-00020', 'mp_name' => 'Technical Officer', 'mp_status' => 'Active'],
+            // CREP (MD2026-00011)
+            ['mp_reference' => 'MP2026-00065', 'mp_department_reference' => 'MD2026-00011', 'mp_name' => 'Statistician', 'mp_status' => 'Active'],
+            // Department of General Education (MD2026-00004)
+            ['mp_reference' => 'MP2026-00066', 'mp_department_reference' => 'MD2026-00004', 'mp_name' => 'Assistant Professor', 'mp_status' => 'Active'],
+            // Knowledge Resources Center (MD2026-00006)
+            ['mp_reference' => 'MP2026-00067', 'mp_department_reference' => 'MD2026-00006', 'mp_name' => 'Librarian', 'mp_status' => 'Active'],
 
         ]);
 

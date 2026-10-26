@@ -18,6 +18,8 @@ class DatabaseSeeder extends Seeder
         $this->call([
             SystemSettingSeeder::class,
             MaintenanceSeeder::class,
+            EmployeesSeeder::class,
+            EmployeeDocumentSeeder::class,
             // UserSeederDeployment::class,
             UserSeederDemo::class,
         ]);
