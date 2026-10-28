@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('eemh_job_family')->nullable();
             $table->string('eemh_employment_status')->nullable();
             $table->date('eemh_date_effective')->nullable();
+            $table->string('eemh_remarks')->nullable();
 
             $table->timestamp('eemh_created_at')->useCurrent();
 

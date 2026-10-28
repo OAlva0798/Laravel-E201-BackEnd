@@ -21,6 +21,7 @@ class EmployeeMovementHistory extends Model
         'eemh_position_reference',
         'eemh_position_level_reference',
         'eemh_job_family',
+        'eemh_remarks',
         'eemh_employment_status',
         'eemh_date_effective',
     ];

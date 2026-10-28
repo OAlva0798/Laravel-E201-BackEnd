@@ -14,8 +14,8 @@ use Throwable;
 
 class EmployeeDocumentController extends Controller
 {
-    private const DIRECTORY = 'employees/';
-    
+    private const DIRECTORY = 'employees';
+
     private const TYPES = [
         'Bio-Data',
         'Appointment Paper',
@@ -38,7 +38,8 @@ class EmployeeDocumentController extends Controller
             ->orderBy('eed_type')
             ->orderByDesc('eed_created_at')
             ->get()
-            ->map(fn (EmployeeDocument $document) => $this->formatDocument($document));
+            ->map(fn (EmployeeDocument $document) => $this->formatDocument($document))
+            ->values();
 
         return response()->json([
             'success' => true,
@@ -79,16 +80,21 @@ class EmployeeDocumentController extends Controller
             ) {
                 foreach ($request->file('files') as $file) {
                     $originalName = basename($file->getClientOriginalName());
-                    $directory = self::DIRECTORY . '/' . $idNumber . '/e-201';
+
+                    $directory = self::DIRECTORY
+                        . '/'
+                        . $idNumber
+                        . '/e-201';
+
                     $targetStoragePath = $directory . '/' . $originalName;
 
-                    // Check duplicate filename in database or storage
                     $existsInDatabase = EmployeeDocument::query()
                         ->where('eed_id_number', $idNumber)
                         ->where('eed_file', $originalName)
                         ->exists();
 
-                    $existsInStorage = Storage::disk('public')->exists($targetStoragePath);
+                    $existsInStorage = Storage::disk('public')
+                        ->exists($targetStoragePath);
 
                     if ($existsInDatabase || $existsInStorage) {
                         throw ValidationException::withMessages([
@@ -98,7 +104,6 @@ class EmployeeDocumentController extends Controller
                         ]);
                     }
 
-                    // Store uploaded file inside 'employees/{idNumber}/e-201' folder
                     $path = $file->storeAs(
                         $directory,
                         $originalName,
@@ -106,17 +111,21 @@ class EmployeeDocumentController extends Controller
                     );
 
                     if (!$path) {
-                        throw new \RuntimeException('Unable to store uploaded file.');
+                        throw new \RuntimeException(
+                            'Unable to store uploaded file.'
+                        );
                     }
 
                     $storedPaths[] = $path;
 
-                    // SAVE ONLY FILENAME IN THE DATABASE
+                    // Save only the filename in the database.
                     $created[] = EmployeeDocument::create([
                         'eed_id_number' => $idNumber,
                         'eed_type' => $validated['eed_type'],
                         'eed_file' => $originalName,
-                        'eed_file_ext' => strtolower($file->getClientOriginalExtension()),
+                        'eed_file_ext' => strtolower(
+                            $file->getClientOriginalExtension()
+                        ),
                     ]);
                 }
             });
@@ -131,9 +140,9 @@ class EmployeeDocumentController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'E-201 documents uploaded successfully.',
-            'data' => collect($created)->map(
-                fn (EmployeeDocument $document) => $this->formatDocument($document)
-            )->values(),
+            'data' => collect($created)
+                ->map(fn (EmployeeDocument $document) => $this->formatDocument($document))
+                ->values(),
         ], 201);
     }
 
@@ -149,6 +158,7 @@ class EmployeeDocumentController extends Controller
             'data' => $this->formatDocument($document),
         ]);
     }
+
 
     public function download(string $idNumber, int $documentId): StreamedResponse
     {
@@ -235,8 +245,15 @@ class EmployeeDocumentController extends Controller
         $uploadedFile = $request->file('file');
 
         if ($uploadedFile) {
-            $originalName = basename($uploadedFile->getClientOriginalName());
-            $directory = self::DIRECTORY . '/' . $idNumber . '/e-201';
+            $originalName = basename(
+                $uploadedFile->getClientOriginalName()
+            );
+
+            $directory = self::DIRECTORY
+                . '/'
+                . $idNumber
+                . '/e-201';
+
             $targetStoragePath = $directory . '/' . $originalName;
 
             $existsInDatabase = EmployeeDocument::query()
@@ -245,11 +262,15 @@ class EmployeeDocumentController extends Controller
                 ->where('eed_file', $originalName)
                 ->exists();
 
-            $existsInStorage = Storage::disk('public')->exists($targetStoragePath);
+            $existsInStorage = Storage::disk('public')
+                ->exists($targetStoragePath);
 
             if (
-                $existsInDatabase ||
-                ($existsInStorage && $targetStoragePath !== $oldStoragePath)
+                $existsInDatabase
+                || (
+                    $existsInStorage
+                    && $targetStoragePath !== $oldStoragePath
+                )
             ) {
                 throw ValidationException::withMessages([
                     'file' => [
@@ -258,10 +279,24 @@ class EmployeeDocumentController extends Controller
                 ]);
             }
 
-            // Backup old file if replacing exact same name
+            // Back up the existing file when replacing it with the same name.
             if ($targetStoragePath === $oldStoragePath) {
-                $backupPath = $directory . '/temp_backup_' . uniqid('', true) . '_' . $oldFileName;
-                Storage::disk('public')->move($oldStoragePath, $backupPath);
+                $backupPath = $directory
+                    . '/temp_backup_'
+                    . uniqid('', true)
+                    . '_'
+                    . $oldFileName;
+
+                $moved = Storage::disk('public')->move(
+                    $oldStoragePath,
+                    $backupPath
+                );
+
+                if (!$moved) {
+                    throw new \RuntimeException(
+                        'Unable to back up the existing document.'
+                    );
+                }
             }
 
             $newStoragePath = $uploadedFile->storeAs(
@@ -272,14 +307,22 @@ class EmployeeDocumentController extends Controller
 
             if (!$newStoragePath) {
                 if ($backupPath) {
-                    Storage::disk('public')->move($backupPath, $oldStoragePath);
+                    Storage::disk('public')->move(
+                        $backupPath,
+                        $oldStoragePath
+                    );
                 }
-                throw new \RuntimeException('Unable to store replacement file.');
+
+                throw new \RuntimeException(
+                    'Unable to store replacement file.'
+                );
             }
 
-            // SAVE ONLY FILENAME
+            // Save only the filename.
             $document->eed_file = $originalName;
-            $document->eed_file_ext = strtolower($uploadedFile->getClientOriginalExtension());
+            $document->eed_file_ext = strtolower(
+                $uploadedFile->getClientOriginalExtension()
+            );
         }
 
         if (isset($validated['eed_type'])) {
@@ -294,17 +337,25 @@ class EmployeeDocumentController extends Controller
             if ($newStoragePath) {
                 Storage::disk('public')->delete($newStoragePath);
             }
+
             if ($backupPath) {
-                Storage::disk('public')->move($backupPath, $oldStoragePath);
+                Storage::disk('public')->move(
+                    $backupPath,
+                    $oldStoragePath
+                );
             }
 
             throw $exception;
         }
 
-        // Cleanup after successful update
+        // Clean up old or temporary files after a successful update.
         if ($backupPath) {
             Storage::disk('public')->delete($backupPath);
-        } elseif ($newStoragePath && $oldStoragePath && $newStoragePath !== $oldStoragePath) {
+        } elseif (
+            $newStoragePath
+            && $oldStoragePath
+            && $newStoragePath !== $oldStoragePath
+        ) {
             Storage::disk('public')->delete($oldStoragePath);
         }
 
@@ -318,8 +369,10 @@ class EmployeeDocumentController extends Controller
     /**
      * Delete a document and its stored file.
      */
-    public function destroy(string $idNumber, int $documentId): JsonResponse
-    {
+    public function destroy(
+        string $idNumber,
+        int $documentId
+    ): JsonResponse {
         $document = $this->findDocument($idNumber, $documentId);
         $storagePath = $this->getStoragePath($document);
 
@@ -327,7 +380,10 @@ class EmployeeDocumentController extends Controller
             $document->delete();
         });
 
-        if ($storagePath && Storage::disk('public')->exists($storagePath)) {
+        if (
+            $storagePath
+            && Storage::disk('public')->exists($storagePath)
+        ) {
             Storage::disk('public')->delete($storagePath);
         }
 
@@ -338,51 +394,78 @@ class EmployeeDocumentController extends Controller
     }
 
     /**
-     * Helper to resolve full disk storage path from filename-only db column.
+     * Resolve the actual storage path from the filename stored in the database.
      */
     private function getStoragePath(EmployeeDocument $document): string
     {
-        if (!$document->eed_file) {
+        if (!$document->eed_file || !$document->eed_id_number) {
             return '';
         }
 
-        return str_contains($document->eed_file, '/')
-            ? $document->eed_file
-            : self::DIRECTORY . '/' . $document->eed_id_number . '/e-201/' . $document->eed_file;
+        // Support older records that already contain a relative storage path.
+        if (str_contains($document->eed_file, '/')) {
+            return $document->eed_file;
+        }
+
+        return self::DIRECTORY
+            . '/'
+            . $document->eed_id_number
+            . '/e-201/'
+            . $document->eed_file;
     }
 
-    private function findDocument(string $idNumber, int $documentId): EmployeeDocument
-    {
+    /**
+     * Find a document belonging to the specified employee.
+     */
+    private function findDocument(
+        string $idNumber,
+        int $documentId
+    ): EmployeeDocument {
         return EmployeeDocument::query()
             ->where('eed_id_number', $idNumber)
             ->where('eed_id', $documentId)
             ->firstOrFail();
     }
 
+    /**
+     * Format a document and report whether its physical file exists.
+     */
     private function formatDocument(EmployeeDocument $document): array
     {
         $disk = Storage::disk('public');
         $storagePath = $this->getStoragePath($document);
-        $hasFile = $storagePath && $disk->exists($storagePath);
+
+        $hasFile = $storagePath !== ''
+            && $disk->exists($storagePath);
 
         $size = 'Unknown';
+
         if ($hasFile) {
-            $size = $this->formatBytes($disk->size($storagePath));
+            $size = $this->formatBytes(
+                $disk->size($storagePath)
+            );
         }
 
         return [
             'eed_id' => $document->eed_id,
             'eed_id_number' => $document->eed_id_number,
             'eed_type' => $document->eed_type,
-            'eed_file' => $document->eed_file, // ONLY FILENAME
+            'eed_file' => $document->eed_file,
             'eed_file_ext' => $document->eed_file_ext,
             'name' => $document->eed_file ?: 'Unnamed document',
             'size' => $size,
+
+            // Used by EmployeesContent to count existing and missing files.
+            'file_exists' => (bool) $hasFile,
+
             'created_at' => $document->eed_created_at,
             'updated_at' => $document->eed_updated_at,
         ];
     }
 
+    /**
+     * Format a byte count into a readable size.
+     */
     private function formatBytes(int $bytes): string
     {
         if ($bytes < 1024) {
@@ -393,7 +476,10 @@ class EmployeeDocumentController extends Controller
         $size = $bytes / 1024;
         $index = 0;
 
-        while ($size >= 1024 && $index < count($units) - 1) {
+        while (
+            $size >= 1024
+            && $index < count($units) - 1
+        ) {
             $size /= 1024;
             $index++;
         }
