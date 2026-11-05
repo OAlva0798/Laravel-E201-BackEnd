@@ -423,6 +423,11 @@ class EmployeeController extends Controller
                 'string',
                 'max:100',
             ],
+            'ee_suffix' => [
+                'nullable',
+                'string',
+                'max:100',
+            ],
             'ee_gender' => [
                 'nullable',
                 'string',

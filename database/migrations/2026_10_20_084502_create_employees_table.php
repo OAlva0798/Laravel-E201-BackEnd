@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('ee_firstname', 100);
             $table->string('ee_middlename', 100)->nullable();
             $table->string('ee_lastname', 100);
+            $table->string('ee_suffix', 100)->nullable();
             $table->string('ee_gender')->nullable();
             $table->date('ee_birth_date')->nullable();
             $table->string('ee_civil_status')->nullable();
